@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import React, { Component } from 'react';
-import User from './user.view';
+import User from './user';
 
 describe('<User />', () => {
   const user = {

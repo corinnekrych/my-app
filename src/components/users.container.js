@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import * as api from '../../api/user.api'
-import UserList from '../views/user.list.view';
+import * as api from '../api/user.api'
+import UserList from './users';
 
-class UserListContainer extends Component {
+class UsersContainer extends Component {
   state = {
     fetched: false,
     users: []
@@ -18,4 +18,4 @@ class UserListContainer extends Component {
   }
 }
 
-export default UserListContainer;
+export default UsersContainer;

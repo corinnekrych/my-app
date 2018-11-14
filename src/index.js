@@ -5,13 +5,13 @@ import {
     BrowserRouter as Router,
     Route
 } from 'react-router-dom';
-import UserListContainer from './components/containers/user.list.container';
-import UserContainer from './components/containers/user.container'
+import UsersContainer from './components/users.container';
+import UserContainer from './components/user.container'
 
 ReactDOM.render(
     <Router>
         <div>
-            <Route exact path="/" component={UserListContainer} />
+            <Route exact path="/" component={UsersContainer} />
             <Route path="/user/:userID" component={UserContainer} />
         </div>
     </Router>

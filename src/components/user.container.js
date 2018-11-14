@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import User from '../views/user.view'
-import * as api from '../../api/user.api'
+import User from './user'
+import * as api from '../api/user.api'
 
 class UserContainer extends Component {
   state = {

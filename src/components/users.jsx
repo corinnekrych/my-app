@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import '../../../node_modules/patternfly/dist/css/patternfly.css';
-import '../../../node_modules/patternfly/dist/css/patternfly-additions.css'
+import '../../node_modules/patternfly/dist/css/patternfly.css';
+import '../../node_modules/patternfly/dist/css/patternfly-additions.css'
 
 class UserList extends Component {
   render() {
