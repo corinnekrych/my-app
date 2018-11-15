@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import {Route, Switch} from 'react-router-dom'
+import {Route} from 'react-router-dom'
 import UsersContainer from '../components/users.container';
 import UserContainer from '../components/user.container';
-import CommentsContainer from '../components/comments.container';
 
 class UserLayout extends Component {
   render() {

@@ -13,7 +13,7 @@ export function parseJson(response) {
   return response.json();
 }
 
-function sortByNameDescending(slice) {
+export function sortByNameDescending(slice) {
   if (!slice instanceof Array) {
     return slice
   }
@@ -24,7 +24,7 @@ function sortByNameDescending(slice) {
   })
 }
 
-function httpUsersCall() {
+export function httpUsersCall() {
   return fetch('http://jsonplaceholder.typicode.com/users', {
     method: 'get',
     headers: {

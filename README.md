@@ -58,4 +58,102 @@ Do nested routing of `/user/:userId/comment` inside `user.container.js` like:
 that doesn’t mean the previous Routes that matched aren’t still rendered.
 This is what confuses a lot of people. Remember, think of Route as rendering another component or null
 
+### Step3: redux
+- install dep:
+  * redux@4.0.1 contains method `createStore`, `applyMiddleware`
+  * react-redux@5.1.1 contains `connect`, your container deal with state (need to subscribe to redux state, dispatch redux actions)
+  * redux-thunk@2.3.0 redux-thunk is a middleware that looks at every action that passes through the system, and if it’s a function, it calls that function. it allows to side effects to be ran without making dispatcher impure..
+> [NOTE on Redux / Router](https://redux.js.org/advanced/usagewithreactrouter): So you want to do routing with your Redux app.
+You can use it with React Router.
+Redux will be the source of truth for your data and React Router
+will be the source of truth for your URL. In most of the cases, it is fine to have them separate unless you need to time travel and rewind actions that trigger a URL change.
 
+> Redux Router is an experimental library, it lets you keep entirely the state of your URL inside your redux store. It has the same API with React Router API but has a smaller community support than react-router.
+
+- create `action.constants.js` and `user.action.js` (move code from api into action as a function)
+- create reducer `user.reducer.js` that take an action constants and return a leave. Reduder deal with action as object. Actions a function are treated as side-effect (redux-thunk) and will evevtuall emit other actions as object to modify the store.
+- inject the store at root level in `index.js`:
+Replace:
+```
+ReactDOM.render(
+  <Router>
+    <Switch>
+      <Route path="/user" component={UserLayout}/>
+    </Switch>
+  </Router>
+  ,
+  document.getElementById('root')
+);
+```
+By:
+```
+const middleware = [ thunk ];
+const store = createStore(
+  userReducer,
+  applyMiddleware(...middleware)
+);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <Router>
+      <Switch>
+        <Route path="/user" component={UserLayout}/>
+      </Switch>
+    </Router>
+  </Provider>
+  ,
+  document.getElementById('root')
+);
+```
+- make the container component subscribe and dispatch instad of modifying the state. Store is now the only source of thruth.
+Replace:
+```
+class UsersContainer extends Component {
+  state = {
+    fetched: false,
+    users: []
+  };
+  componentDidMount() {
+    console.log(`PROPS is ${JSON.stringify(this.props)}`);
+    api.getUsers().then(users => this.setState({ users: users, fetched: true }));
+  }
+  render() {
+    if (!this.state.fetched) {
+      return (<div className='spinner'></div>);
+    }
+    return (<div>
+      <UserList users={this.state.users} />
+    </div>);
+  }
+}
+export default UsersContainer;
+```
+By:
+```
+class UsersContainer extends Component {
+  componentDidMount() {
+    this.props.dispatch(fetchUsers);
+  }
+  render() {
+    if (!this.props.fetched) {
+      return (<div className='spinner'></div>);
+    }
+    return (<UserList users={this.props.users} />);
+  }
+}
+const mapStateToProps = function(store) {
+  return {
+    users: store.users,
+    fetched: store.fetched
+  };
+};
+
+export default connect(mapStateToProps)(UsersContainer);
+```
+Let's play the game of finding 4 diff
+- we do not initialize state
+- in `componentDidMount`, we dispatch an function action instead of calling ajax http
+- in `render` we do not use `this.state` as it's not available anymore, but that all the attribute of state are now passed as props.
+- we use HoC `connect` curried with our store info and our ContainComponent => that will generate a compoent with all binding to store without us accessing direclty the store.
+
+> NOTE: I leave unchanged the components.container.js (still working!) altho not a best practice.

@@ -1,25 +1,22 @@
 import React, { Component } from 'react';
 import User from './user'
-import getUser from '../api/user.api'
+import {fetchUsers} from '../actions/user.actions';
 import {Route} from 'react-router-dom';
 import CommentsContainer from './comments.container';
+import { connect } from 'react-redux';
 
 class UserContainer extends Component {
-  state = {
-    fetched: false
-  };
   componentDidMount() {
-    console.log(`PROPS is ${JSON.stringify(this.props)}`);
-    getUser(this.props.match.params.userID).then(user => this.setState({ user: user, fetched: true }));
+    this.props.dispatch(fetchUsers);
   }
   render() {
-    if (!this.state.fetched) {
+    if (!this.props.fetched) {
       return (<div className='spinner'></div>);
     }
     return (
       <div>
         {this.props.match.isExact ? (
-          <User user={this.state.user} />
+          <User user={this.props.users.find(e => e.id.toString() === this.props.match.params.userID)} />
         ) : (
           <Route path={`${this.props.match.path}/comment`} component={CommentsContainer} />
         )}
@@ -27,5 +24,16 @@ class UserContainer extends Component {
     );
   }
 }
+const mapStateToProps = function(store) {
+  if (store.fetched) {
+    return {
+      users: store.users,
+      fetched: store.fetched ? store.fetched: false
+    };
+  }
+  return {
+    fetched:  false
+  };
+};
 
-export default UserContainer;
+export default connect(mapStateToProps)(UserContainer);
