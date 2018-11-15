@@ -2,21 +2,26 @@ import * as serviceWorker from './serviceWorker';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
-    BrowserRouter as Router,
-    Route
+  BrowserRouter as Router,
+  Redirect,
+  Route,
+  Switch
 } from 'react-router-dom';
+import UserLayout from './layouts/user.layout'
 import UsersContainer from './components/users.container';
-import UserContainer from './components/user.container'
 
 ReactDOM.render(
-    <Router>
-        <div>
-            <Route exact path="/" component={UsersContainer} />
-            <Route path="/user/:userID" component={UserContainer} />
-        </div>
-    </Router>
-    ,
-    document.getElementById('root')
+  <Router>
+    <Switch>
+      {/*<Route exact path="/" component={UsersContainer} />*/}
+      {/*<Route exact path="/user" component={UsersContainer} />*/}
+      {/*<Route path="/user/:userID" component={UserContainer} />*/}
+      {/*<Redirect exact path="/" component={UserLayout}/>*/}
+      <Route path="/user" component={UserLayout}/>
+    </Switch>
+  </Router>
+  ,
+  document.getElementById('root')
 );
 
 

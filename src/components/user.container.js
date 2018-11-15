@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import User from './user'
-import * as api from '../api/user.api'
+import getUser from '../api/user.api'
+import {Route} from 'react-router-dom';
+import CommentsContainer from './comments.container';
 
 class UserContainer extends Component {
   state = {
     fetched: false
   };
   componentDidMount() {
-    api.getUser(this.props.match.params.userID).then(user => this.setState({ user: user, fetched: true }));
+    console.log(`PROPS is ${JSON.stringify(this.props)}`);
+    getUser(this.props.match.params.userID).then(user => this.setState({ user: user, fetched: true }));
   }
   render() {
     if (!this.state.fetched) {
@@ -15,7 +18,11 @@ class UserContainer extends Component {
     }
     return (
       <div>
-        <User user={this.state.user} />
+        {this.props.match.isExact ? (
+          <User user={this.state.user} />
+        ) : (
+          <Route path={`${this.props.match.path}/comment`} component={CommentsContainer} />
+        )}
       </div>
     );
   }

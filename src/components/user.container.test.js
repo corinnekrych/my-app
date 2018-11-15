@@ -28,12 +28,14 @@ describe('<UserContainer />', () => {
   };
 
   it('should render spinner when data not fetched', () => {
-    const wrapper = shallow(<UserContainer />);
+    const routerValue = {params: {userID: 1}};
+    const wrapper = shallow(<UserContainer match={routerValue}/>);
     expect(wrapper.debug()).toEqual('<div className="spinner" />');
   });
 
   it('should render one component with UserList', () => {
-    const wrapper = shallow(<UserContainer />);
+    const routerValue = {params: {userID: 1}};
+    const wrapper = shallow(<UserContainer match={routerValue}/>);
     wrapper.setState({fetched:true, user: user});
     expect(wrapper.debug()).toContain('User');
   });

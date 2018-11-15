@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import {Link, Route} from 'react-router-dom';
 import '../../node_modules/patternfly/dist/css/patternfly.css';
 import '../../node_modules/patternfly/dist/css/patternfly-additions.css'
-import CommentsContainer from './comments.container';
 
-class UserList extends Component {
+class CommentList extends Component {
   render() {
-    const userComponents = this.props.users.map((user) => (
-      <div className="list-group-item" key={user.id}>
+    const user = this.props.user;
+    const commentComponent = this.props.comments.map((comment) => (
+      <div className="list-group-item" key={comment.id}>
         <div className="list-group-item-header">
           <div className="list-view-pf-main-info">
             <div className="list-view-pf-left">
@@ -16,38 +15,20 @@ class UserList extends Component {
             <div className="list-view-pf-body">
               <div className="list-view-pf-description">
                 <div className="list-group-item-heading">
-                  <Link
-                    to={`/user/${user.id}`}
-                    key={user.id}
-                    >
-                    {user.name}
-                  </Link>
+                    {comment.title}
                 </div>
               </div>
               <div className="list-view-pf-additional-info">
                 <div className="list-view-pf-additional-info-item">
-                  <Link
-                    to={`/user/${user.id}/comment`}
-                    key={user.id}
-                  >
-                  {user.username},
-                  </Link>
+                  {comment.body},
                 </div>
                 <div className="list-view-pf-additional-info-item">
-                  {user.email}
-                </div>
-                <div className="list-view-pf-additional-info-item">
-                  <div className="clearfix">
-                    <div>{user.address.street}</div>
-                    <div>{user.address.city}, {user.address.country} {user.address.zipcode}</div>
-                  </div>
+                  {user.name}
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        <Route path="/user/:userID/comments" component={CommentsContainer} />
       </div>
     ));
     return (
@@ -55,21 +36,21 @@ class UserList extends Component {
         <div className="row">
           <div className="col-md-12">
             <div className="page-header">
-              <h1>List of users</h1>
+              <h1>List of comments for {user.name}</h1>
             </div>
           </div>
         </div>
         <div className="row">
           <div className="col-md-12">
             <div className="list-group list-view-pf list-view-pf-view">
-              {userComponents}
+              {commentComponent}
             </div>
           </div>
         </div>
-        <Route path="/comments" component={CommentsContainer} />
+
       </div>
     );
   }
 }
 
-export default UserList;
+export default CommentList;

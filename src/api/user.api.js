@@ -1,4 +1,4 @@
-function checkStatus(response) {
+export function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
   }
@@ -9,7 +9,7 @@ function checkStatus(response) {
   throw error;
 }
 
-function parseJson(response) {
+export function parseJson(response) {
   return response.json();
 }
 
@@ -33,7 +33,7 @@ function httpUsersCall() {
   });
 }
 
-export function getUser(userId) {
+export default function getUser(userId) {
   return getUsers().then(function (users) {
     return users.find(e => e.id.toString() === userId);
   })
